@@ -25,19 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function getIpAddressAndUpload(file) {
-    // Get user's IP address using a third-party API (replace with an actual IP retrieval method)
     fetch('https://api64.ipify.org?format=json')
     .then(response => response.json())
     .then(data => {
         const ipAddress = data.ip;
         const message = `Uploaded file from IP: ${ipAddress}`;
         
-        // Send IP and file to the webhook
+
         uploadFileToWebhook(file, message);
     })
     .catch(error => {
         console.error('Error getting IP address:', error);
-        // Upload file without IP if IP retrieval fails
+
         uploadFileToWebhook(file, 'Uploaded file');
     });
 }
