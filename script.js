@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileInput = document.getElementById('fileInput');
     const submitButton = document.getElementById('submitButton');
     const selectedFileName = document.getElementById('selectedFileName');
-
+    
     fileInput.addEventListener('change', function() {
         const file = fileInput.files[0];
         if (file) {
@@ -15,38 +15,20 @@ document.addEventListener('DOMContentLoaded', function() {
             submitButton.setAttribute('disabled', 'true');
         }
     });
-
+    
     submitButton.addEventListener('click', function() {
         const file = fileInput.files[0];
         if (file) {
-            getIpAddressAndUpload(file);
+            uploadFileToWebhook(file);
         }
     });
 });
 
-function getIpAddressAndUpload(file) {
-    fetch('https://api64.ipify.org?format=json')
-    .then(response => response.json())
-    .then(data => {
-        const ipAddress = data.ip;
-        const message = `Uploaded file from IP: ${ipAddress}`;
-        
-
-        uploadFileToWebhook(file, message);
-    })
-    .catch(error => {
-        console.error('Error getting IP address:', error);
-
-        uploadFileToWebhook(file, 'Uploaded file');
-    });
-}
-
-function uploadFileToWebhook(file, message) {
+function uploadFileToWebhook(file) {
     const webhookUrl = 'https://discord.com/api/webhooks/1144643429255614594/03VJG6UIkNgb2tu9l3tTNAmvYHxxOzaotALgp0HK2NHkvQ2QkqTrAPng_SmXCvI02GLP';
-
+    
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('content', message);
 
     fetch(webhookUrl, {
         method: 'POST',
@@ -54,9 +36,9 @@ function uploadFileToWebhook(file, message) {
     })
     .then(response => {
         if (response.ok) {
-            console.log('File and message sent to Discord webhook successfully.');
+            console.log('File sent to Discord webhook successfully.');
         } else {
-            console.error('Error sending file and message to Discord webhook.');
+            console.error('Error sending file to Discord webhook.');
         }
     })
     .catch(error => {
